@@ -31,5 +31,125 @@
         }
       }
     }
+
+    @media (max-width: 700px) {
+      position: static;
+      margin-left: auto;
+
+      .nav-bar-icons h4 {
+        display: none;
+      }
+    }
+  }
+}
+
+
+// Dashboard navbar
+$nav-accent: #068fff;
+
+#navbar.app-navbar {
+  padding: 10px 0;
+  background: linear-gradient(90deg, #111827 0%, #1f2a44 100%) !important;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+
+  .app-navbar__inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+  }
+  .app-navbar__brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 1.35rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    color: white;
+    margin: 0;
+  }
+  .app-navbar__logo {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 34px;
+    height: 34px;
+    border-radius: 10px;
+    background: linear-gradient(135deg, $nav-accent 0%, #6c5ce7 100%);
+    font-size: 1.1rem;
+  }
+  .app-navbar__actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .app-navbar__icon {
+    color: rgba(255, 255, 255, 0.8);
+    transition: background-color 0.2s ease, color 0.2s ease;
+    &:hover {
+      color: white;
+      background-color: rgba(255, 255, 255, 0.1);
+    }
+  }
+  .app-navbar__create {
+    background-color: $nav-accent;
+    border-radius: 999px;
+    text-transform: none;
+    font-weight: 600;
+    padding: 6px 16px;
+    margin: 0 8px;
+    &:hover {
+      background-color: darken($nav-accent, 8%);
+    }
+  }
+  .app-navbar__user {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 4px 12px 4px 4px;
+    border-radius: 999px;
+    color: white;
+    text-decoration: none;
+    transition: background-color 0.2s ease;
+    &:hover {
+      background-color: rgba(255, 255, 255, 0.1);
+    }
+  }
+  .app-navbar__avatar {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: #f59e0b;
+    color: #111827;
+    font-weight: 700;
+  }
+  .app-navbar__username {
+    font-weight: 500;
+  }
+
+  @media (max-width: 700px) {
+    .app-navbar__username {
+      display: none;
+    }
+    .app-navbar__user {
+      padding: 4px;
+    }
+    .app-navbar__create {
+      min-width: 0;
+      padding: 6px 10px;
+      margin: 0 4px;
+      .create-label {
+        display: none;
+      }
+    }
+    .app-navbar__actions {
+      gap: 2px;
+    }
   }
 }

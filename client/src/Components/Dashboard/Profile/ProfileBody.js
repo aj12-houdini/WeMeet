@@ -26,8 +26,8 @@ function CustomTabPanel(props) {
       {...other}
     >
       {value === index && (
-        <Box sx={{ p: 3 }}>
-          <Typography>{children}</Typography>
+        <Box sx={{ pt: 2 }}>
+          <Typography component="div">{children}</Typography>
         </Box>
       )}
     </div>
@@ -93,15 +93,32 @@ export default function ProfileBody(props) {
   return (
     <Container className="profile-body">
       <div className="profile-heading">
-        <Avatar sx={{ bgcolor: deepPurple[500] }}>AJ</Avatar>
-        <span>{props.username}</span>
+        <Avatar
+          className="profile-heading__avatar"
+          sx={{ bgcolor: deepPurple[500], width: 72, height: 72, fontSize: 28 }}
+        >
+          {(props.username || "?").slice(0, 2).toUpperCase()}
+        </Avatar>
+        <div className="profile-heading__info">
+          <h1 className="profile-heading__name">{props.username}</h1>
+          <div className="profile-heading__stats">
+            <span>
+              <strong>{posts.length}</strong> posts
+            </span>
+            <span>
+              <strong>{followers.length}</strong> followers
+            </span>
+            <span>
+              <strong>{following.length}</strong> following
+            </span>
+          </div>
+        </div>
         {!userFlag && (
           <Button
-            variant="contained"
-            color="success"
+            variant={follow ? "outlined" : "contained"}
             onClick={() => updateFollow()}
-            style={{ marginLeft: "20px" }}
             className="follow"
+            disableElevation
           >
             {follow ? "Unfollow" : "Follow"}
           </Button>
@@ -113,7 +130,7 @@ export default function ProfileBody(props) {
             <Tabs
               value={value}
               onChange={handleChange}
-              aria-label="basic tabs example"
+              aria-label="Profile sections"
             >
               <Tab label="Posts" {...a11yProps(0)} />
               <Tab label="Followers" {...a11yProps(1)} />
@@ -125,6 +142,7 @@ export default function ProfileBody(props) {
               {posts.length != 0 ? (
                 posts.map((post) => (
                   <PostHeader
+                    key={post.id}
                     userFlag={userFlag}
                     id={post.id}
                     title={post.title}
@@ -134,19 +152,44 @@ export default function ProfileBody(props) {
                   />
                 ))
               ) : (
-                <h1>No posts to show </h1>
+                <div className="feed-empty">
+                  <h2>No posts to show</h2>
+                  <p>
+                    {userFlag
+                      ? "Posts you create will appear here."
+                      : "This user hasn't posted anything yet."}
+                  </p>
+                </div>
               )}
             </CustomTabPanel>
           </div>
           <CustomTabPanel value={value} index={1}>
-            {followers.map((follower) => {
-              return <div className="connections">{follower}</div>;
-            })}
+            {followers.length ? (
+              followers.map((follower) => (
+                <div key={follower} className="connections">
+                  <span className="connections__avatar">
+                    {follower.slice(0, 1).toUpperCase()}
+                  </span>
+                  {follower}
+                </div>
+              ))
+            ) : (
+              <p className="profile-empty">No followers yet.</p>
+            )}
           </CustomTabPanel>
           <CustomTabPanel value={value} index={2}>
-            {following.map((followed) => {
-              return <div className="connections">{followed}</div>;
-            })}
+            {following.length ? (
+              following.map((followed) => (
+                <div key={followed} className="connections">
+                  <span className="connections__avatar">
+                    {followed.slice(0, 1).toUpperCase()}
+                  </span>
+                  {followed}
+                </div>
+              ))
+            ) : (
+              <p className="profile-empty">Not following anyone yet.</p>
+            )}
           </CustomTabPanel>
         </Box>
       </div>

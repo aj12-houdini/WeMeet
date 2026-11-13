@@ -13,7 +13,7 @@ export default function Posts() {
   return (
     <div>
       {isLoggedIn && (
-        <div>
+        <div className="dashboard">
           <NavBar />
           <PostBody />
         </div>

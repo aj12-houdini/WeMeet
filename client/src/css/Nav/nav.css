@@ -31,4 +31,118 @@
 #navbar #nav-child .nav-bar-icons svg:hover {
   transform: scale(1.1);
   transition: all 0.3s ease-in;
+}
+@media (max-width: 700px) {
+  #navbar #nav-child {
+    position: static;
+    margin-left: auto;
+  }
+  #navbar #nav-child .nav-bar-icons h4 {
+    display: none;
+  }
+}
+/* Dashboard navbar */
+#navbar.app-navbar {
+  padding: 10px 0;
+  background: linear-gradient(90deg, #111827 0%, #1f2a44 100%) !important;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+#navbar.app-navbar .app-navbar__inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+#navbar.app-navbar .app-navbar__brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 1.35rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  color: white;
+  margin: 0;
+}
+#navbar.app-navbar .app-navbar__logo {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #068fff 0%, #6c5ce7 100%);
+  font-size: 1.1rem;
+}
+#navbar.app-navbar .app-navbar__actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+#navbar.app-navbar .app-navbar__icon {
+  color: rgba(255, 255, 255, 0.8);
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+#navbar.app-navbar .app-navbar__icon:hover {
+  color: white;
+  background-color: rgba(255, 255, 255, 0.1);
+}
+#navbar.app-navbar .app-navbar__create {
+  background-color: #068fff;
+  border-radius: 999px;
+  text-transform: none;
+  font-weight: 600;
+  padding: 6px 16px;
+  margin: 0 8px;
+}
+#navbar.app-navbar .app-navbar__create:hover {
+  background-color: #007ade;
+}
+#navbar.app-navbar .app-navbar__user {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 12px 4px 4px;
+  border-radius: 999px;
+  color: white;
+  text-decoration: none;
+  transition: background-color 0.2s ease;
+}
+#navbar.app-navbar .app-navbar__user:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+#navbar.app-navbar .app-navbar__avatar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: #f59e0b;
+  color: #111827;
+  font-weight: 700;
+}
+#navbar.app-navbar .app-navbar__username {
+  font-weight: 500;
+}
+@media (max-width: 700px) {
+  #navbar.app-navbar .app-navbar__username {
+    display: none;
+  }
+  #navbar.app-navbar .app-navbar__user {
+    padding: 4px;
+  }
+  #navbar.app-navbar .app-navbar__create {
+    min-width: 0;
+    padding: 6px 10px;
+    margin: 0 4px;
+  }
+  #navbar.app-navbar .app-navbar__create .create-label {
+    display: none;
+  }
+  #navbar.app-navbar .app-navbar__actions {
+    gap: 2px;
+  }
 }/*# sourceMappingURL=nav.css.map */

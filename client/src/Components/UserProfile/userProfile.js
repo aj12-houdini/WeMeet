@@ -17,7 +17,7 @@ export default function UserProfile() {
   }, [id, username]);
 
   return (
-    <div className="profile">
+    <div className="profile dashboard">
       <NavBar />
       <ProfileBody id={userid} username={username} />
     </div>

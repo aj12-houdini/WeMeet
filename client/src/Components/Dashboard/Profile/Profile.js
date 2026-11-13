@@ -16,7 +16,7 @@ export default function Profile() {
   return (
     <div>
       {isLoggedIn && (
-        <div className="profile">
+        <div className="profile dashboard">
           {" "}
           <NavBar /> <ProfileBody username = {localStorage.getItem("username")} id={localStorage.getItem("id")} />{" "}
         </div>
