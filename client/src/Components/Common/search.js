@@ -1,40 +1,44 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { search } from "../../js/utils";
 import SearchedUser from "../UserProfile/searched_user";
+
 export default function Search() {
-  
-  const [loading, setState] = useState(null);
+  const [loading, setLoading] = useState(false);
   const [query, changeQuery] = useState("");
   const [userData, changeData] = useState([]);
 
-  async function searchPosts(value) {
+  async function searchUsers(value) {
     if (value === "") {
       changeData([]);
       return;
     }
-    setState(true);
+    setLoading(true);
     const response = await search(`http://localhost:8000/search/user/${value}`);
-    setState(false);
-    console.log(response);
+    setLoading(false);
     changeData(response);
   }
 
   function changeHandler(e) {
-    searchPosts(e.target.value);
+    searchUsers(e.target.value);
     changeQuery(e.target.value);
   }
 
+  const noResults = query !== "" && !loading && userData && userData.length === 0;
+
   return (
-    <div style={{ textAlign: "center" }}>
+    <div className="search">
       <input
+        className="search__input"
+        type="search"
         value={query}
-        onChange={(e) => changeHandler(e)}
+        onChange={changeHandler}
         name="user"
-        id=""
-        placeholder="Enter user title"
+        placeholder="Search by username…"
+        aria-label="Search users by username"
       />
+      {noResults && <p className="search__hint">No users found</p>}
       {userData && (
-        <div>
+        <div className="search__results">
           {userData.map((data) => (
             <SearchedUser
               key={data._id}

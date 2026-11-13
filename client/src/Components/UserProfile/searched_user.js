@@ -1,15 +1,16 @@
 import "../../css/UserProfile/user.css";
 
-
 export default function SearchedUser(props) {
   function handleClick() {
-    console.log(props.username);
-    window.location.href= `/dashboard/users/${props.id}`
+    window.location.href = `/dashboard/users/${props.id}`;
   }
 
   return (
-    <div onClick={handleClick} className="searched-user">
-      <h4>{props.username}</h4>
-    </div>
+    <button type="button" onClick={handleClick} className="searched-user">
+      <span className="searched-user__avatar">
+        {props.username.slice(0, 1).toUpperCase()}
+      </span>
+      <span className="searched-user__name">{props.username}</span>
+    </button>
   );
 }

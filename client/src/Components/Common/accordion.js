@@ -6,28 +6,43 @@ import Typography from "@mui/material/Typography";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import Avatar from "@mui/material/Avatar";
 import "bootstrap/dist/css/bootstrap.css";
-import { deepPurple, red } from "@mui/material/colors";
+import { deepPurple, indigo, teal, orange, pink, red } from "@mui/material/colors";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { deletePost } from "../../js/deletePost";
+
+const avatarColors = [deepPurple[500], indigo[500], teal[600], orange[700], pink[500]];
+
+function initials(name = "") {
+  return name.slice(0, 2).toUpperCase() || "?";
+}
+
+function avatarColor(name = "") {
+  let sum = 0;
+  for (const char of name) sum += char.charCodeAt(0);
+  return avatarColors[sum % avatarColors.length];
+}
 
 export default function PostAccordion(props) {
   function handleClick() {
     deletePost(props);
   }
   return (
-    <Accordion style={{ margin: "10px 0" }}>
+    <Accordion className="post-card" disableGutters>
       <AccordionSummary
         className="feed"
         expandIcon={<ExpandMoreIcon />}
-        aria-controls="panel1a-content"
-        id="panel1a-header"
+        aria-controls={`post-${props.id}-content`}
+        id={`post-${props.id}-header`}
       >
-        <Avatar sx={{ bgcolor: deepPurple[500] }}>AJ</Avatar>
-        <Typography style={{ margin: "auto 10px" }}>
-          <span style={{ fontWeight: "bolder" }}>{props.title} </span>
-          <span>on {props.date} by</span>
-          <span> {props.user}</span>
-        </Typography>
+        <Avatar sx={{ bgcolor: avatarColor(props.user) }}>
+          {initials(props.user)}
+        </Avatar>
+        <div className="post-card__meta">
+          <span className="post-card__title">{props.title}</span>
+          <span className="post-card__byline">
+            {props.user} · {props.date}
+          </span>
+        </div>
       </AccordionSummary>
       <AccordionDetails className="accordion-details">
         <Typography>{props.descr}</Typography>

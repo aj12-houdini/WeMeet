@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React from "react";
+import { useNavigate } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
@@ -30,14 +31,20 @@ const theme = createTheme({
 });
 
 function NavBar() {
-  const [state, changeState] = useState(false);
+  const navigate = useNavigate();
   function createPost() {
-    changeState(true);
+    navigate("/dashboard/posts");
   }
   return (
     <Navbar id="navbar" bg="dark" data-bs-theme="dark">
       <Container>
-        <Navbar.Brand href="#home">
+        <Navbar.Brand
+          href="/dashboard"
+          onClick={(event) => {
+            event.preventDefault();
+            navigate("/dashboard");
+          }}
+        >
           <h3>OurApp</h3>
         </Navbar.Brand>
         <Nav id="nav-child" className="me-auto">

@@ -3,13 +3,26 @@ import NavBar from "../Nav";
 import Body from "./Body";
 import Search from "../../Common/search";
 import Chat from "../../UserProfile/Chat";
-export default function LandingPage({socket}) {
+import "../../../css/Dashboard/dashboard.css";
+
+export default function LandingPage({ socket }) {
   return (
-    <div>
+    <div className="dashboard">
       <NavBar />
-      <Body />
-      <Search/>
-      <Chat socket={socket} />
+      <main className="dashboard-layout">
+        <section className="dashboard-feed">
+          <Body />
+        </section>
+        <aside className="dashboard-sidebar">
+          <div className="dashboard-card">
+            <h2 className="dashboard-card__title">Find people</h2>
+            <Search />
+          </div>
+          <div className="dashboard-card">
+            <Chat socket={socket} />
+          </div>
+        </aside>
+      </main>
     </div>
   );
 }
