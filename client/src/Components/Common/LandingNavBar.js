@@ -4,6 +4,7 @@ import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 import "../../css/Nav/nav.css";
 import Button from "@mui/material/Button";
+import { authApi } from "../../js/api/AuthApi";
 
 function LandingNavBar({ socket }) {
   async function handleSubmit(event) {
@@ -12,18 +13,7 @@ function LandingNavBar({ socket }) {
     const email = form.get("email");
     const password = form.get("password");
 
-    const options = {
-      method: "POST",
-      body: new URLSearchParams({
-        email: email,
-        password: password,
-      }),
-      headers: {
-        "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8",
-      },
-    };
-    const loginResponse = await fetch("http://localhost:8000/auth/login", options);
-    const data = await loginResponse.json();
+    const data = await authApi.login(email, password);
     if (data.token) {
       localStorage.setItem("token", data.token);
       localStorage.setItem("username", data.username);

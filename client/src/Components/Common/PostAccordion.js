@@ -7,7 +7,7 @@ import Avatar from "@mui/material/Avatar";
 import "bootstrap/dist/css/bootstrap.css";
 import { deepPurple, indigo, teal, orange, pink, red } from "@mui/material/colors";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { deletePost } from "../../js/deletePost";
+import { postApi } from "../../js/api/PostApi";
 
 const avatarColors = [deepPurple[500], indigo[500], teal[600], orange[700], pink[500]];
 
@@ -22,8 +22,9 @@ function avatarColor(name = "") {
 }
 
 export default function PostAccordion(props) {
-  function handleClick() {
-    deletePost(props.id);
+  async function handleClick() {
+    await postApi.delete(props.id);
+    window.location.href = "/dashboard/profile";
   }
   return (
     <Accordion className="post-card" disableGutters>

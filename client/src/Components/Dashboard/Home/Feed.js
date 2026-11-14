@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import "../../../css/Dashboard/dashboard.css";
-import { fetchFeed } from "../../../js/fetchFeed";
+import { postApi } from "../../../js/api/PostApi";
 import PostItem from "../Post/PostItem";
 
 export default function Feed() {
@@ -8,7 +8,7 @@ export default function Feed() {
 
   useEffect(() => {
     (async () => {
-      const feedResponse = await fetchFeed(localStorage.getItem("id"));
+      const feedResponse = await postApi.getFeed();
       setPosts(feedResponse.followedPostsArr);
     })();
   }, []);

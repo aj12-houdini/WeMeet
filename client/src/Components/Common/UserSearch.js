@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { searchUsers } from "../../js/searchUsers";
 import SearchResultItem from "../UserProfile/SearchResultItem";
+import { API_BASE_URL } from "../../js/config";
 
 export default function UserSearch() {
   const [loading, setLoading] = useState(false);
@@ -13,7 +14,7 @@ export default function UserSearch() {
       return;
     }
     setLoading(true);
-    const response = await searchUsers(`http://localhost:8000/search/user/${value}`);
+    const response = await searchUsers(`${API_BASE_URL}search/user/${value}`);
     setLoading(false);
     setResults(response);
   }

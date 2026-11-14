@@ -2,16 +2,21 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const app = express();
 const cors = require("cors");
+
+// Must match API_BASE_URL in client/src/js/config.js
+const PORT = 8000;
+const CLIENT_ORIGIN = "http://localhost:3000";
+
 app.use(cors());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static("client/build"));
 
-const server = app.listen(8000, () => {
-  console.log("Server started on port 8000");
+const server = app.listen(PORT, () => {
+  console.log(`Server started on port ${PORT}`);
 });
 
 const io = require("socket.io")(server, {
-  cors: { origin: "http://localhost:3000" },
+  cors: { origin: CLIENT_ORIGIN },
 });
 
 io.use((socket, next) => {

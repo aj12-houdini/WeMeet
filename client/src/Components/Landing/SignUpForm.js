@@ -1,10 +1,11 @@
 import Form from "react-bootstrap/Form";
 import Button from "@mui/material/Button";
 import SendIcon from "@mui/icons-material/Send";
+import { API_BASE_URL } from "../../js/config";
 
 function SignUpForm() {
   return (
-    <Form action="http://localhost:8000/auth/signup" method="post">
+    <Form action={API_BASE_URL + "auth/signup"} method="post">
       <Form.Group className="mb-3" controlId="formBasicUsername">
         <Form.Label>Username</Form.Label>
         <Form.Control name="username" type="text" placeholder="Username" />

@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import ProfileBody from "../Dashboard/Profile/ProfileBody";
 import DashboardNavBar from "../Dashboard/DashboardNavBar";
+import { userApi } from "../../js/api/UserApi";
 
 export default function UserProfile() {
   const { userid } = useParams();
@@ -9,8 +10,7 @@ export default function UserProfile() {
   const [username, setUsername] = useState("");
   useEffect(() => {
     (async () => {
-      const res = await fetch(`http://localhost:8000/get/users/${userid}`);
-      const data = await res.json();
+      const data = await userApi.getUser(userid);
       setId(userid);
       setUsername(data.username);
     })();

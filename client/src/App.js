@@ -6,7 +6,8 @@ import Profile from "./Components/Dashboard/Profile/Profile";
 import CreatePostPage from "./Components/Dashboard/Post/CreatePostPage";
 import UserProfile from "./Components/UserProfile/UserProfile";
 import { io } from "socket.io-client";
-const socket = io("http://localhost:8000");
+import { API_BASE_URL } from "./js/config";
+const socket = io(API_BASE_URL);
 
 function App() {
   return (

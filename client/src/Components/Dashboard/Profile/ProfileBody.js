@@ -10,9 +10,9 @@ import Box from "@mui/material/Box";
 import { Container } from "@mui/material";
 import "../../../css/Dashboard/dashboard.css";
 import PostItem from "../Post/PostItem";
-import { followUser } from "../../../js/followUser";
 import Button from "@mui/material/Button";
-import { fetchFollowerInfo } from "../../../js/fetchFollowerInfo";
+import { postApi } from "../../../js/api/PostApi";
+import { userApi } from "../../../js/api/UserApi";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -60,25 +60,18 @@ export default function ProfileBody(props) {
   };
 
   function toggleFollow() {
-    followUser(props.id, !isFollowing);
+    userApi.follow(props.id, !isFollowing);
     setIsFollowing(!isFollowing);
   }
 
   useEffect(() => {
     if (localStorage.getItem("id") === props.id) setIsOwnProfile(true);
     (async () => {
-      const options = {
-        method: "GET",
-        headers: {
-          id: props.id,
-        },
-      };
-      const response = await fetch("http://localhost:8000/get/posts", options);
-      const data = await response.json();
+      const data = await postApi.getUserPosts(props.id);
       setPosts(data.posts);
     })();
     (async () => {
-      const followInfo = await fetchFollowerInfo(props.id);
+      const followInfo = await userApi.getFollowInfo(props.id);
       setIsFollowing(followInfo.isFollowing);
       setFollowers(followInfo.followers);
       setFollowing(followInfo.following);

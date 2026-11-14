@@ -2,14 +2,23 @@ import { useNavigate } from "react-router-dom";
 import Form from "react-bootstrap/Form";
 import Button from "@mui/material/Button";
 import SendIcon from "@mui/icons-material/Send";
-import { submitPost } from "../../../js/submitPost";
+import { postApi } from "../../../js/api/PostApi";
 import "../../../css/Dashboard/dashboard.css";
 
 export default function CreatePostForm() {
   const navigate = useNavigate();
 
-  function handleSubmit(event) {
-    submitPost(event);
+  async function handleSubmit(event) {
+    event.preventDefault();
+
+    const formData = new FormData(event.target);
+    const data = await postApi.create(
+      formData.get("title"),
+      formData.get("description")
+    );
+    if (data.created) {
+      window.location.href = "/dashboard/profile";
+    }
   }
 
   return (
