@@ -1,14 +1,13 @@
-import React from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
-import Navbar from "../Common/navbar";
-import Body from "./home-body";
+import LandingNavBar from "../Common/LandingNavBar";
+import LandingBody from "./LandingBody";
 import Footer from "../Common/Footer";
 
 function HomePage({ socket }) {
   return (
     <section style={{ backgroundColor: "#F5F5F5" }}>
-      <Navbar socket={socket} />
-      <Body />
+      <LandingNavBar socket={socket} />
+      <LandingBody />
       <Footer />
     </section>
   );

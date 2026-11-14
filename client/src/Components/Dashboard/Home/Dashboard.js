@@ -1,16 +1,9 @@
-import React, { useEffect, useState } from "react";
-import LandingPage from "./LandingPage";
-import {checkLogin} from "../../../js/checkLogin"
+import DashboardHome from "./DashboardHome";
+import { useRequireLogin } from "../../../hooks/useRequireLogin";
 
 
 export default function Dashboard({socket}) {
-  const [isLoggedIn, changeState] = useState(false);
-  useEffect(() => {
-    (async () => {
-      const userLoggedIn = await checkLogin();
-      userLoggedIn ? changeState(true) : (window.location.href = "/");
-    })();
-  });
+  const isLoggedIn = useRequireLogin();
 
-  return <div>{isLoggedIn && <LandingPage socket={socket} />}</div>;
+  return <div>{isLoggedIn && <DashboardHome socket={socket} />}</div>;
 }
