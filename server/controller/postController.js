@@ -1,5 +1,6 @@
 const User = require("../models/User");
 const Post = require("../models/Post");
+const { ValidationError } = require("../errors/ApiError");
 
 function formatPost(post) {
   return {
@@ -25,13 +26,9 @@ async function createPost(req, res) {
       date: new Date(),
       user: username,
     });
-    post.save().then((savedPost) => {
-      User.findOneAndUpdate({ _id: authorId }, { $push: { post: savedPost._id } }).then(
-        () => {
-          res.json({ created: true, post_id: savedPost._id });
-        }
-      );
-    });
+    const savedPost = await post.save();
+    await User.findOneAndUpdate({ _id: authorId }, { $push: { post: savedPost._id } });
+    res.json({ created: true, post_id: savedPost._id });
   } catch (error) {
     console.log(error);
   }
@@ -48,7 +45,7 @@ async function getPosts(req, res) {
   try {
     const profileUser = await User.findById(profileUserId);
     postIds = profileUser.post;
-    if (!profileUser) return res.json({ message: "Error Could not find user!" });
+    if (!profileUser) throw new ValidationError("Could not find user")
     for (let postId of postIds) {
       const post = await Post.findById(postId);
       let formattedPost = formatPost(post);

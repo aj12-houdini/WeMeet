@@ -1,5 +1,6 @@
 require("dotenv").config();
 const jwt = require("jsonwebtoken");
+const { AuthError } = require("../errors/ApiError");
 
 function isUserAuthenticated(req, res, next) {
   const token = req.headers.tokenkey;
@@ -7,7 +8,7 @@ function isUserAuthenticated(req, res, next) {
     jwt.verify(token, process.env.JWT_KEY);
     res.json({ message: "succesfull" });
   } else {
-    res.json({ message: "Unsucesfull" });
+    throw new AuthError("Not logged in ")
   }
 }
 

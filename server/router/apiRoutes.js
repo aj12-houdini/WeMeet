@@ -1,6 +1,7 @@
 require("dotenv").config();
 const express = require("express");
 const router = express.Router();
+const asyncHandler = require("../middleware/asyncHandler");
 
 const {
   validateSignIn,
@@ -12,8 +13,8 @@ const { signup, signIn } = require("../controller/authController");
 const { createPost, getPosts, deletePost, getPostsOfFollowing } = require("../controller/postController");
 const { searchUsers, getUser, followUser, getFollowInfo } = require("../controller/userController");
 
-router.route("/auth/signup").post(validateSignUp, isRequestValidated, signup);
-router.route("/auth/login").post(validateSignIn, isRequestValidated, signIn);
+router.route("/auth/signup").post(validateSignUp, isRequestValidated, asyncHandler(signup));
+router.route("/auth/login").post(validateSignIn, isRequestValidated, asyncHandler(signIn));
 router.route("/post").post(validatePost, isRequestValidated, createPost);
 router.route("/get/posts").get(getPosts);
 router.route("/delete/posts").delete(deletePost);

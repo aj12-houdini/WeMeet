@@ -1,25 +1,20 @@
 require("dotenv").config();
 const bcrypt = require("bcrypt");
-const { StatusCodes } = require("http-status-codes");
 const jwt = require("jsonwebtoken");
 const User = require("../models/User");
-
+const { ValidationError } = require("../errors/ApiError");
 
 async function signup(req, res) {
   const { username, email, password } = req.body;
 
   if (!username || !email || !password)
-    return res
-      .status(StatusCodes.BAD_REQUEST)
-      .json({ message: "Provide more information" });
+    throw new ValidationError("Provide more information");
 
   const hashedPassword = await bcrypt.hash(password, +process.env.SALT_ROUNDS);
 
   const user = await User.findOne({ email: email });
   if (user)
-    return res.status(StatusCodes.BAD_REQUEST).json({
-      message: "User already registered",
-    });
+    throw new ValidationError("User already registered");
   else {
     const newUser = await User.create({
       username: username,
@@ -35,9 +30,7 @@ async function signIn(req, res) {
   const { email, password } = req.body;
 
   if (!email || !password)
-    return res
-      .status(StatusCodes.BAD_REQUEST)
-      .json({ message: "Missing details" });
+    throw new ValidationError("Missing details");
 
   const user = await User.findOne({ email: email });
 
@@ -53,9 +46,7 @@ async function signIn(req, res) {
       res.json({ id: user._id, username: user.username, token: token });
     }
   } else {
-    res
-      .status(StatusCodes.BAD_REQUEST)
-      .json({ message: "user does not exists" });
+    throw new ValidationError("user does not exists");
   }
 }
 

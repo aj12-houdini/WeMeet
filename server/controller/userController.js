@@ -1,5 +1,6 @@
 const User = require("../models/User");
-
+const userService = require("../services/UserService");
+const { ValidationError, NotFoundError } = require("../errors/ApiError");
 async function getUser(req, res) {
   const profileUserId = req.params.id;
 
@@ -14,7 +15,7 @@ async function getUser(req, res) {
         followers: user.followers,
         following: user.following,
       });
-    } else res.json({ user: "Not found" });
+    } else throw new NotFoundError("User not found")
   } catch (error) {
     console.log(error);
   }
@@ -41,20 +42,10 @@ async function followUser(req, res) {
   try {
     switch (followAction) {
       case "Followed":
-        await User.findByIdAndUpdate(loggedInUserId, {
-          $push: { following: targetUserId },
-        });
-        await User.findByIdAndUpdate(targetUserId, {
-          $push: { followers: loggedInUserId },
-        });
+        await userService.follow(loggedInUserId, targetUserId)
         break;
       case "Unfollow":
-        await User.findByIdAndUpdate(loggedInUserId, {
-          $pull: { following: targetUserId },
-        });
-        await User.findByIdAndUpdate(targetUserId, {
-          $pull: { followers: loggedInUserId },
-        });
+        await userService.unfollow(loggedInUserId, targetUserId)
         break;
     }
     res.json({ message: "Done" });

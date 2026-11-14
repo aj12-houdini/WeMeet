@@ -63,3 +63,6 @@ app.get("/home", (req, res) => {
 
 app.use(require("./router/apiRoutes.js"));
 app.use(require("./router/dashboardRoutes.js"));
+
+// Must come after all routes
+app.use(require("./middleware/errorHandler"));
