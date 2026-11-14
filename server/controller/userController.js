@@ -1,6 +1,6 @@
 const User = require("../models/User");
 const userService = require("../services/UserService");
-const { ValidationError, NotFoundError } = require("../errors/ApiError");
+
 async function getUser(req, res) {
   const profileUserId = req.params.id;
 
@@ -15,7 +15,7 @@ async function getUser(req, res) {
         followers: user.followers,
         following: user.following,
       });
-    } else throw new NotFoundError("User not found")
+    } else res.json({ user: "Not found" });
   } catch (error) {
     console.log(error);
   }
@@ -62,21 +62,14 @@ async function getFollowInfo(req, res) {
   let followerUsernames = [];
 
   try {
-    const profileUser = await User.findById(profileUserId);
+    const profileUser = await userService.findById(profileUserId);
     let profileUserFollowing = profileUser.following;
     let profileUserFollowers = profileUser.followers;
 
-    for (const followerId of profileUserFollowers) {
-      const followerUser = await User.findById(followerId);
-      followerUsernames.push(followerUser.username);
-    }
-    for (const followedId of profileUserFollowing) {
-      const followedUser = await User.findById(followedId);
-      followingUsernames.push(followedUser.username);
-    }
-    const loggedInUser = await User.findById(loggedInUserId)
-    if (loggedInUser.following.includes(profileUserId)) isFollowing = true;
-    else isFollowing = false;
+    await userService.collectUserNames(profileUserFollowers, followerUsernames);
+    await userService.collectUserNames(profileUserFollowing, followingUsernames);
+
+    isFollowing = await userService.isFollowing(loggedInUserId, profileUserId);
   } catch (error) {
     console.log(error);
   }
