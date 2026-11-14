@@ -1,16 +1,15 @@
-export async function followUser(followerId, followed) {
-  console.log(followed);
+export async function followUser(profileUserId, shouldFollow) {
+  console.log(shouldFollow);
   const userId = localStorage.getItem("id");
 
-  if (followed) followed = "Followed";
-  else followed = "Unfollow";
+  const followAction = shouldFollow ? "Followed" : "Unfollow";
 
   const options = {
     method: "PATCH",
     headers: new URLSearchParams({
       userId,
-      followerId,
-      followed,
+      followerId: profileUserId,
+      followed: followAction,
     }),
   };
   const response = await fetch("http://localhost:8000/follow", options);

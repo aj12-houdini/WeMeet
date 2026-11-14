@@ -1,9 +1,9 @@
-export async function deletePost(props) {
+export async function deletePost(postId) {
     const options = {
       method: "DELETE",
       headers: {
         userId: localStorage.getItem("id"),
-        postId: props.id,
+        postId,
       },
     };
     const response = await fetch("http://localhost:8000/delete/posts", options);

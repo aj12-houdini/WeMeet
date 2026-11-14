@@ -7,10 +7,9 @@ const session = require("express-session");
 const bcrypt = require("bcrypt");
 const { StatusCodes } = require("http-status-codes");
 const jwt = require("jsonwebtoken");
-const User = require("../models/usermodel");
+const User = require("../models/User");
 
 
-const Post = require("../models/postmodel");
 app.use(cors());
 
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -24,8 +23,6 @@ app.use(
 );
 
 async function signup(req, res) {
-  console.log(req.body);
-
   const { username, email, password } = req.body;
 
   if (!username || !email || !password)
@@ -35,43 +32,42 @@ async function signup(req, res) {
 
   const hashedPassword = await bcrypt.hash(password, +process.env.SALT_ROUNDS);
 
-  const findUser = await User.findOne({ email: email });
-  if (findUser)
+  const user = await User.findOne({ email: email });
+  if (user)
     return res.status(StatusCodes.BAD_REQUEST).json({
       message: "User already registered",
     });
   else {
-    const user = await User.create({
+    const newUser = await User.create({
       username: username,
       email: email,
       password: hashedPassword,
     });
-    user.save();
+    newUser.save();
     res.json({ message: "added" });
   }
 }
 
 async function signIn(req, res) {
   const { email, password } = req.body;
-  console.log(email, password);
 
   if (!email || !password)
     return res
       .status(StatusCodes.BAD_REQUEST)
       .json({ message: "Missing details" });
 
-  const findUser = await User.findOne({ email: email });
+  const user = await User.findOne({ email: email });
 
-  if (findUser) {
-    const matchedPasswords = await bcrypt.compare(password, findUser.password);
+  if (user) {
+    const matchedPasswords = await bcrypt.compare(password, user.password);
 
     if (matchedPasswords) {
-      const token = jwt.sign({ _id: findUser._id }, process.env.JWT_KEY, {
+      const token = jwt.sign({ _id: user._id }, process.env.JWT_KEY, {
         expiresIn: "30d",
       });
 
-      findUser.token = token;
-      res.json({ id: findUser._id, username: findUser.username, token: token });
+      user.token = token;
+      res.json({ id: user._id, username: user.username, token: token });
     }
   } else {
     res

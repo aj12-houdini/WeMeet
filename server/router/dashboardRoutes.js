@@ -1,12 +1,12 @@
 const express = require("express");
 const router = express.Router();
-const isAuthenticated = require("./auth");
+const isUserAuthenticated = require("../middleware/isUserAuthenticated");
 const app = express();
 const bodyParser = require("body-parser");
 
 app.use(bodyParser.urlencoded({ extended: true }));
 
-router.get("/dashboard", isAuthenticated, (req, res) => {
+router.get("/dashboard", isUserAuthenticated, (req, res) => {
   res.redirect("/");
 });
 

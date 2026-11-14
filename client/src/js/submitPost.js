@@ -1,9 +1,9 @@
-export async function makePost(event) {
+export async function submitPost(event) {
     event.preventDefault();
 
-    const form = new FormData(event.target);
-    const title = form.get("title");
-    const description = form.get("description");
+    const formData = new FormData(event.target);
+    const title = formData.get("title");
+    const description = formData.get("description");
     const options = {
       method: "POST",
       body: new URLSearchParams({
@@ -13,8 +13,8 @@ export async function makePost(event) {
         description,
       }),
     };
-    const getResponse = await fetch("http://localhost:8000/post", options);
-    const data = await getResponse.json();
+    const response = await fetch("http://localhost:8000/post", options);
+    const data = await response.json();
     if(data.created){
       window.location.href='/dashboard/profile'
     }

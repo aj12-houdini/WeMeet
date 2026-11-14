@@ -3,14 +3,14 @@ import { useNavigate } from "react-router-dom";
 import Form from "react-bootstrap/Form";
 import Button from "@mui/material/Button";
 import SendIcon from "@mui/icons-material/Send";
-import { makePost } from "../../../js/makePost";
+import { submitPost } from "../../../js/submitPost";
 import "../../../css/Dashboard/dashboard.css";
 
-export default function PostBody() {
+export default function CreatePostForm() {
   const navigate = useNavigate();
 
   function handleSubmit(event) {
-    makePost(event);
+    submitPost(event);
   }
 
   return (

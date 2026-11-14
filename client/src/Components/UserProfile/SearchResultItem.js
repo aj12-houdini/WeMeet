@@ -1,6 +1,6 @@
 import "../../css/UserProfile/user.css";
 
-export default function SearchedUser(props) {
+export default function SearchResultItem(props) {
   function handleClick() {
     window.location.href = `/dashboard/users/${props.id}`;
   }

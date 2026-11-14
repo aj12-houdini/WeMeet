@@ -9,12 +9,12 @@ import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import { Container } from "@mui/material";
 import "../../../css/Dashboard/dashboard.css";
-import PostHeader from "../Post/PostHeader";
-import { followUser } from "../../../js/follow";
+import PostItem from "../Post/PostItem";
+import { followUser } from "../../../js/followUser";
 import Button from "@mui/material/Button";
-import { checkFollower } from "../../../js/checkFollower";
+import { fetchFollowerInfo } from "../../../js/fetchFollowerInfo";
 
-function CustomTabPanel(props) {
+function TabPanel(props) {
   const { children, value, index, ...other } = props;
 
   return (
@@ -34,7 +34,7 @@ function CustomTabPanel(props) {
   );
 }
 
-CustomTabPanel.propTypes = {
+TabPanel.propTypes = {
   children: PropTypes.node,
   index: PropTypes.number.isRequired,
   value: PropTypes.number.isRequired,
@@ -48,27 +48,24 @@ function a11yProps(index) {
 }
 
 export default function ProfileBody(props) {
-  const [value, setValue] = useState(0);
+  const [activeTab, setActiveTab] = useState(0);
   const [posts, setPosts] = useState([]);
-  const [userFlag, changeFlag] = useState(false);
-  const [follow, changeFollow] = useState(false);
-  const [followers, updateFollowers] = useState([]);
-  const [following, updateFollowing] = useState([]);
+  const [isOwnProfile, setIsOwnProfile] = useState(false);
+  const [isFollowing, setIsFollowing] = useState(false);
+  const [followers, setFollowers] = useState([]);
+  const [following, setFollowing] = useState([]);
 
-  const handleChange = (event, newValue) => {
-    setValue(newValue);
+  const handleTabChange = (event, newTab) => {
+    setActiveTab(newTab);
   };
-  function callFollow() {
-    followUser(props.id, !follow);
-  }
 
-  function updateFollow() {
-    callFollow();
-    changeFollow(!follow);
+  function toggleFollow() {
+    followUser(props.id, !isFollowing);
+    setIsFollowing(!isFollowing);
   }
 
   useEffect(() => {
-    if (localStorage.getItem("id") === props.id) changeFlag(true);
+    if (localStorage.getItem("id") === props.id) setIsOwnProfile(true);
     (async () => {
       const options = {
         method: "GET",
@@ -81,12 +78,10 @@ export default function ProfileBody(props) {
       setPosts(data.posts);
     })();
     (async () => {
-      const { isFollowing, followers, following } = await checkFollower(
-        props.id
-      );
-      changeFollow(isFollowing);
-      updateFollowers(followers);
-      updateFollowing(following);
+      const followInfo = await fetchFollowerInfo(props.id);
+      setIsFollowing(followInfo.isFollowing);
+      setFollowers(followInfo.followers);
+      setFollowing(followInfo.following);
     })();
   }, []);
 
@@ -113,14 +108,14 @@ export default function ProfileBody(props) {
             </span>
           </div>
         </div>
-        {!userFlag && (
+        {!isOwnProfile && (
           <Button
-            variant={follow ? "outlined" : "contained"}
-            onClick={() => updateFollow()}
+            variant={isFollowing ? "outlined" : "contained"}
+            onClick={toggleFollow}
             className="follow"
             disableElevation
           >
-            {follow ? "Unfollow" : "Follow"}
+            {isFollowing ? "Unfollow" : "Follow"}
           </Button>
         )}
       </div>
@@ -128,8 +123,8 @@ export default function ProfileBody(props) {
         <Box sx={{ width: "100%" }}>
           <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
             <Tabs
-              value={value}
-              onChange={handleChange}
+              value={activeTab}
+              onChange={handleTabChange}
               aria-label="Profile sections"
             >
               <Tab label="Posts" {...a11yProps(0)} />
@@ -138,32 +133,32 @@ export default function ProfileBody(props) {
             </Tabs>
           </Box>
           <div>
-            <CustomTabPanel value={value} index={0}>
+            <TabPanel value={activeTab} index={0}>
               {posts.length != 0 ? (
                 posts.map((post) => (
-                  <PostHeader
+                  <PostItem
                     key={post.id}
-                    userFlag={userFlag}
+                    canDelete={isOwnProfile}
                     id={post.id}
                     title={post.title}
                     date={post.date}
-                    descr={post.description}
-                    user = {post.user}
+                    description={post.description}
+                    author={post.user}
                   />
                 ))
               ) : (
                 <div className="feed-empty">
                   <h2>No posts to show</h2>
                   <p>
-                    {userFlag
+                    {isOwnProfile
                       ? "Posts you create will appear here."
                       : "This user hasn't posted anything yet."}
                   </p>
                 </div>
               )}
-            </CustomTabPanel>
+            </TabPanel>
           </div>
-          <CustomTabPanel value={value} index={1}>
+          <TabPanel value={activeTab} index={1}>
             {followers.length ? (
               followers.map((follower) => (
                 <div key={follower} className="connections">
@@ -176,8 +171,8 @@ export default function ProfileBody(props) {
             ) : (
               <p className="profile-empty">No followers yet.</p>
             )}
-          </CustomTabPanel>
-          <CustomTabPanel value={value} index={2}>
+          </TabPanel>
+          <TabPanel value={activeTab} index={2}>
             {following.length ? (
               following.map((followed) => (
                 <div key={followed} className="connections">
@@ -190,7 +185,7 @@ export default function ProfileBody(props) {
             ) : (
               <p className="profile-empty">Not following anyone yet.</p>
             )}
-          </CustomTabPanel>
+          </TabPanel>
         </Box>
       </div>
     </Container>

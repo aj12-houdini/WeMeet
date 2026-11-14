@@ -12,7 +12,7 @@ import ModeCommentIcon from "@mui/icons-material/ModeComment";
 import SearchIcon from "@mui/icons-material/Search";
 import LogoutIcon from "@mui/icons-material/Logout";
 
-function NavBar() {
+function DashboardNavBar() {
   const navigate = useNavigate();
   const username = localStorage.getItem("username") || "";
 
@@ -82,4 +82,4 @@ function NavBar() {
   );
 }
 
-export default NavBar;
+export default DashboardNavBar;

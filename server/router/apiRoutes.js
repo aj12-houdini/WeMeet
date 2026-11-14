@@ -14,10 +14,10 @@ const {
   validateSignUp,
   isRequestValidated,
   validatePost,
-} = require("../validators/auth");
-const { signup, signIn } = require("./auth");
-const { createPost, getPosts, deletePosts, getFollowingPosts } = require("./posts");
-const { searchUser, getUser, followUser, getFollowers } = require("./user");
+} = require("../validators/requestValidators");
+const { signup, signIn } = require("../controller/authController");
+const { createPost, getPosts, deletePost, getPostsOfFollowing } = require("../controller/postController");
+const { searchUsers, getUser, followUser, getFollowInfo } = require("../controller/userController");
 
 app.use(
   session({
@@ -31,10 +31,10 @@ router.route("/auth/signup").post(validateSignUp, isRequestValidated, signup);
 router.route("/auth/login").post(validateSignIn, isRequestValidated, signIn);
 router.route("/post").post(validatePost, isRequestValidated, createPost);
 router.route("/get/posts").get(getPosts);
-router.route("/delete/posts").delete(deletePosts);
-router.route("/search/user/:query").get(searchUser);
+router.route("/delete/posts").delete(deletePost);
+router.route("/search/user/:query").get(searchUsers);
 router.route("/get/users/:id").get(getUser);
 router.route("/follow").patch(followUser);
-router.route("/get/follower").get(getFollowers)
-router.route("/get/following/posts").get(getFollowingPosts)
+router.route("/get/follower").get(getFollowInfo)
+router.route("/get/following/posts").get(getPostsOfFollowing)
 module.exports = router;

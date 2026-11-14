@@ -1,15 +1,15 @@
 import { useEffect, useState } from "react";
 import "../../../css/Dashboard/dashboard.css";
-import { showTimelinePost } from "../../../js/showTimelinePost";
-import PostHeader from "../Post/PostHeader";
+import { fetchFeed } from "../../../js/fetchFeed";
+import PostItem from "../Post/PostItem";
 
-export default function Body() {
-  const [posts, updatePosts] = useState([]);
+export default function Feed() {
+  const [posts, setPosts] = useState([]);
 
   useEffect(() => {
     (async () => {
-      const getPosts = await showTimelinePost(localStorage.getItem("id"));
-      updatePosts(getPosts.followedPostsArr);
+      const feedResponse = await fetchFeed(localStorage.getItem("id"));
+      setPosts(feedResponse.followedPostsArr);
     })();
   }, []);
 
@@ -23,14 +23,14 @@ export default function Body() {
       </header>
       {posts.length ? (
         posts.map((post) => (
-          <PostHeader
+          <PostItem
             key={post.id}
-            userFlag={false}
+            canDelete={false}
             id={post.id}
             title={post.title}
             date={post.date}
-            descr={post.description}
-            user={post.user}
+            description={post.description}
+            author={post.user}
           />
         ))
       ) : (

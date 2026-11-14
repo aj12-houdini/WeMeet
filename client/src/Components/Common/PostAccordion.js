@@ -24,7 +24,7 @@ function avatarColor(name = "") {
 
 export default function PostAccordion(props) {
   function handleClick() {
-    deletePost(props);
+    deletePost(props.id);
   }
   return (
     <Accordion className="post-card" disableGutters>
@@ -34,19 +34,19 @@ export default function PostAccordion(props) {
         aria-controls={`post-${props.id}-content`}
         id={`post-${props.id}-header`}
       >
-        <Avatar sx={{ bgcolor: avatarColor(props.user) }}>
-          {initials(props.user)}
+        <Avatar sx={{ bgcolor: avatarColor(props.author) }}>
+          {initials(props.author)}
         </Avatar>
         <div className="post-card__meta">
           <span className="post-card__title">{props.title}</span>
           <span className="post-card__byline">
-            {props.user} · {props.date}
+            {props.author} · {props.date}
           </span>
         </div>
       </AccordionSummary>
       <AccordionDetails className="accordion-details">
-        <Typography>{props.descr}</Typography>
-        {props.userFlag && (
+        <Typography>{props.description}</Typography>
+        {props.canDelete && (
           <DeleteIcon
             onClick={handleClick}
             className="delete"

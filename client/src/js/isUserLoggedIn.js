@@ -1,4 +1,4 @@
-export async function checkLogin() {
+export async function isUserLoggedIn() {
   try {
     const options = {
       method: "GET",

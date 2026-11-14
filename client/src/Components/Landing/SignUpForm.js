@@ -3,7 +3,7 @@ import Form from "react-bootstrap/Form";
 import Button from "@mui/material/Button";
 import SendIcon from "@mui/icons-material/Send";
 
-function Signup() {
+function SignUpForm() {
   return (
     <Form action="http://localhost:8000/auth/signup" method="post">
       <Form.Group className="mb-3" controlId="formBasicUsername">
@@ -28,4 +28,4 @@ function Signup() {
     </Form>
   );
 }
-export default Signup;
+export default SignUpForm;

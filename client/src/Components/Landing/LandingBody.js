@@ -2,9 +2,9 @@ import React from "react";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
-import Signup from "./SignUp";
+import SignUpForm from "./SignUpForm";
 
-function Body() {
+function LandingBody() {
   return (
     <Container style={{ background: "", padding: "7% 8%" }} fluid>
       <Row>
@@ -19,10 +19,10 @@ function Body() {
           </div>
         </Col>
         <Col>
-          <Signup />
+          <SignUpForm />
         </Col>
       </Row>
     </Container>
   );
 }
-export default Body;
+export default LandingBody;

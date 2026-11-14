@@ -64,5 +64,5 @@ app.get("/home", (req, res) => {
   res.json({ message: "Hello from react" });
 });
 
-app.use(require("./controller/controller.js"));
-app.use(require("./router/routers.js"));
+app.use(require("./router/apiRoutes.js"));
+app.use(require("./router/dashboardRoutes.js"));

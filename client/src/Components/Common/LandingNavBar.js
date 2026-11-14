@@ -6,7 +6,7 @@ import Navbar from "react-bootstrap/Navbar";
 import "../../css/Nav/nav.css";
 import Button from "@mui/material/Button";
 
-function NavBar({ socket }) {
+function LandingNavBar({ socket }) {
   async function handleSubmit(event) {
     event.preventDefault();
     const form = new FormData(event.target);
@@ -23,8 +23,8 @@ function NavBar({ socket }) {
         "Content-Type": "application/x-www-form-urlencoded;charset=UTF-8",
       },
     };
-    const getToken = await fetch("http://localhost:8000/auth/login", options);
-    const data = await getToken.json();
+    const loginResponse = await fetch("http://localhost:8000/auth/login", options);
+    const data = await loginResponse.json();
     console.log(data);
     if (data.token) {
       localStorage.setItem("token", data.token);
@@ -68,4 +68,4 @@ function NavBar({ socket }) {
   );
 }
 
-export default NavBar;
+export default LandingNavBar;

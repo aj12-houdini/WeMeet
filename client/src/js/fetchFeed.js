@@ -1,4 +1,4 @@
-export async function showTimelinePost(userId){
+export async function fetchFeed(userId){
     const options = {
         method: "GET",
         headers: new URLSearchParams({

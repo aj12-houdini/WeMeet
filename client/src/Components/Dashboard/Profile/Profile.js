@@ -1,16 +1,16 @@
 import React from "react";
-import NavBar from "../Nav";
+import DashboardNavBar from "../DashboardNavBar";
 import ProfileBody from "./ProfileBody";
 import { useEffect, useState } from "react";
-import { checkLogin } from "../../../js/checkLogin";
+import { isUserLoggedIn } from "../../../js/isUserLoggedIn";
 
 
 export default function Profile() {
-  const [isLoggedIn, changeState] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   useEffect(() => {
     (async () => {
-      const userLoggedIn = await checkLogin();
-      userLoggedIn ? changeState(true) : (window.location.href = "/");
+      const loggedIn = await isUserLoggedIn();
+      loggedIn ? setIsLoggedIn(true) : (window.location.href = "/");
     })();
   });
   return (
@@ -18,7 +18,7 @@ export default function Profile() {
       {isLoggedIn && (
         <div className="profile dashboard">
           {" "}
-          <NavBar /> <ProfileBody username = {localStorage.getItem("username")} id={localStorage.getItem("id")} />{" "}
+          <DashboardNavBar /> <ProfileBody username = {localStorage.getItem("username")} id={localStorage.getItem("id")} />{" "}
         </div>
       )}
     </div>

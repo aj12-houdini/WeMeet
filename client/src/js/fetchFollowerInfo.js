@@ -1,9 +1,9 @@
-export async function checkFollower(followerId) {
+export async function fetchFollowerInfo(profileUserId) {
   const options = {
     method: "GET",
     headers: new URLSearchParams({
       userId: localStorage.getItem("id"),
-      followerId,
+      followerId: profileUserId,
     }),
   };
   const res = await fetch("http://localhost:8000/get/follower", options);
