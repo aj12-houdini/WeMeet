@@ -1,6 +1,6 @@
 require("dotenv").config();
 const bcrypt = require("bcrypt");
-const jwt = require("jsonwebtoken");
+const jose = require("jose");
 const userService = require("../services/UserService");
 const { ValidationError } = require("../errors/ApiError");
 
@@ -33,9 +33,7 @@ async function signIn(req, res) {
     const matchedPasswords = await bcrypt.compare(password, user.password);
 
     if (matchedPasswords) {
-      const token = jwt.sign({ _id: user._id }, process.env.JWT_KEY, {
-        expiresIn: "30d",
-      });
+      const token = await new jose.SignJWT({ _id: user._id.toString() }).setProtectedHeader({alg: "HS256"}).setExpirationTime("30d").sign(process.env.JWT_KEY)
 
       user.token = token;
       res.json({ id: user._id, username: user.username, token: token });
