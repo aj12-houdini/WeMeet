@@ -17,22 +17,18 @@ const io = require("socket.io")(server, {
 
 io.use((socket, next) => {
   const username = socket.handshake.auth.username;
-  console.log(username)
   socket.username = username;
   next();
 }).on("connection", (socket) => {
-  console.log(`⚡: ${socket.id} user just connected!`);
 
   const users = [];
 
   for (let [id, socket] of io.of("/").sockets) {
-    console.log(id)
     users.push({
       userId: id,
       username: socket.username,
     });
   }
-  console.log(users);
   socket.emit("users", users);
   socket.broadcast.emit("user connected", {
     username: socket.username,
@@ -42,7 +38,6 @@ io.use((socket, next) => {
   socket.on("private_chat", function (data) {
     const to = data.to,
       message = data.message;
-    console.log(to);
     socket.to(to).emit("private_chat", {
       //The sender's username
       username: socket.username,
@@ -53,10 +48,8 @@ io.use((socket, next) => {
   socket.on("newUser", (data) => {
     users[data.username] = data.username;
     socket.username = socket;
-    console.log("New user signed in");
   });
   socket.on("disconnect", () => {
-    console.log("🔥: A user disconnected");
   });
 });
 

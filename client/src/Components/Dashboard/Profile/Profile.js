@@ -1,4 +1,3 @@
-import React from "react";
 import DashboardNavBar from "../DashboardNavBar";
 import ProfileBody from "./ProfileBody";
 import { useEffect, useState } from "react";

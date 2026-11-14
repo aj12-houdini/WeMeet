@@ -7,6 +7,5 @@ export async function deletePost(postId) {
       },
     };
     const response = await fetch("http://localhost:8000/delete/posts", options);
-    const data = await response.json();
     window.location.href = "/dashboard/profile";
   }

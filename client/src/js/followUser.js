@@ -1,5 +1,4 @@
 export async function followUser(profileUserId, shouldFollow) {
-  console.log(shouldFollow);
   const userId = localStorage.getItem("id");
 
   const followAction = shouldFollow ? "Followed" : "Unfollow";

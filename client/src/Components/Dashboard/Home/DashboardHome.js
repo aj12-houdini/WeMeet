@@ -1,4 +1,3 @@
-import React from "react";
 import DashboardNavBar from "../DashboardNavBar";
 import Feed from "./Feed";
 import UserSearch from "../../Common/UserSearch";

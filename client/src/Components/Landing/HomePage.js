@@ -1,4 +1,3 @@
-import React from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import LandingNavBar from "../Common/LandingNavBar";
 import LandingBody from "./LandingBody";
