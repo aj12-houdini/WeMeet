@@ -1,14 +1,7 @@
 require("dotenv").config();
 const express = require("express");
-const bodyParser = require("body-parser");
-const app = express();
-const cors = require("cors");
-const session = require("express-session");
 const router = express.Router();
 
-app.use(cors());
-
-app.use(bodyParser.urlencoded({ extended: true }));
 const {
   validateSignIn,
   validateSignUp,
@@ -18,14 +11,6 @@ const {
 const { signup, signIn } = require("../controller/authController");
 const { createPost, getPosts, deletePost, getPostsOfFollowing } = require("../controller/postController");
 const { searchUsers, getUser, followUser, getFollowInfo } = require("../controller/userController");
-
-app.use(
-  session({
-    secret: process.env.SECRET,
-    resave: false,
-    saveUninitialized: true,
-  })
-);
 
 router.route("/auth/signup").post(validateSignUp, isRequestValidated, signup);
 router.route("/auth/login").post(validateSignIn, isRequestValidated, signIn);

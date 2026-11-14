@@ -11,7 +11,5 @@ export async function followUser(profileUserId, shouldFollow) {
       followed: followAction,
     }),
   };
-  const response = await fetch("http://localhost:8000/follow", options);
-  const data = await response.json();
-  console.log(data);
+  await fetch("http://localhost:8000/follow", options);
 }

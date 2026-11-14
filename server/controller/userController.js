@@ -1,10 +1,4 @@
-const express = require("express");
-const app = express();
-const cors = require("cors");
-
 const User = require("../models/User");
-
-app.use(cors());
 
 async function getUser(req, res) {
   const profileUserId = req.params.id;

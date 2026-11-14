@@ -6,7 +6,6 @@ export default function Chat({ socket }) {
   const [messages, setMessages] = useState([]);
   useEffect(() => {
     socket.on("private_chat", (data) => {
-      console.log(data);
       setMessages([...messages, data]);
     });
   }, [socket, messages]);

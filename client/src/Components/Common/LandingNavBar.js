@@ -24,7 +24,6 @@ function LandingNavBar({ socket }) {
     };
     const loginResponse = await fetch("http://localhost:8000/auth/login", options);
     const data = await loginResponse.json();
-    console.log(data);
     if (data.token) {
       localStorage.setItem("token", data.token);
       localStorage.setItem("username", data.username);

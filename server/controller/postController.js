@@ -1,11 +1,5 @@
-const express = require("express");
-const app = express();
-const cors = require("cors");
-
 const User = require("../models/User");
 const Post = require("../models/Post");
-
-app.use(cors());
 
 function formatPost(post) {
   return {

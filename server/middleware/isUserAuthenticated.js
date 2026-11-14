@@ -1,10 +1,5 @@
 require("dotenv").config();
 const jwt = require("jsonwebtoken");
-const express = require("express");
-const bodyParser = require("body-parser");
-const app = express();
-
-app.use(bodyParser.urlencoded({ extended: true }));
 
 function isUserAuthenticated(req, res, next) {
   const token = req.headers.tokenkey;

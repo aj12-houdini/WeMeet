@@ -1,26 +1,9 @@
 require("dotenv").config();
-const express = require("express");
-const bodyParser = require("body-parser");
-const app = express();
-const cors = require("cors");
-const session = require("express-session");
 const bcrypt = require("bcrypt");
 const { StatusCodes } = require("http-status-codes");
 const jwt = require("jsonwebtoken");
 const User = require("../models/User");
 
-
-app.use(cors());
-
-app.use(bodyParser.urlencoded({ extended: true }));
-
-app.use(
-  session({
-    secret: process.env.SECRET,
-    resave: false,
-    saveUninitialized: true,
-  })
-);
 
 async function signup(req, res) {
   const { username, email, password } = req.body;

@@ -8,7 +8,6 @@ export async function fetchFollowerInfo(profileUserId) {
   };
   const res = await fetch("http://localhost:8000/get/follower", options);
   const data = await res.json();
-  console.log(data);
   return {
     isFollowing: data.following,
     followers: data.followersArr,
