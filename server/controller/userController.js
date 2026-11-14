@@ -1,11 +1,10 @@
-const User = require("../models/User");
 const userService = require("../services/UserService");
 
 async function getUser(req, res) {
   const profileUserId = req.params.id;
 
   try {
-    const user = await User.findById(profileUserId);
+    const user = await userService.findById(profileUserId);
 
     if (user) {
       res.json({
@@ -27,9 +26,7 @@ async function searchUsers(req, res) {
     console.log("Empty");
     return;
   }
-  const usernameFilter = { username: { $regex: searchTerm, $options: "i" } };
-
-  const matchingUsers = await User.find(usernameFilter);
+  const matchingUsers = await userService.searchByUsername(searchTerm);
   res.json({ documents: matchingUsers });
 }
 

@@ -1,16 +1,6 @@
-const User = require("../models/User");
-const Post = require("../models/Post");
+const userService = require("../services/UserService");
+const postService = require("../services/PostService");
 const { ValidationError } = require("../errors/ApiError");
-
-function formatPost(post) {
-  return {
-    id: post._id,
-    title: post.title,
-    description: post.description,
-    date: post.date,
-    user: post.user,
-  };
-}
 
 async function createPost(req, res) {
   const { id:authorId, username, title, description } = req.body;
@@ -20,14 +10,8 @@ async function createPost(req, res) {
     return;
   }
   try {
-    const post = await Post.create({
-      title,
-      description,
-      date: new Date(),
-      user: username,
-    });
-    const savedPost = await post.save();
-    await User.findOneAndUpdate({ _id: authorId }, { $push: { post: savedPost._id } });
+    const savedPost = await postService.create(title, description, username);
+    await userService.addPostToUser(authorId, savedPost._id);
     res.json({ created: true, post_id: savedPost._id });
   } catch (error) {
     console.log(error);
@@ -43,14 +27,10 @@ async function getPosts(req, res) {
   let postIds = [];
   let userPosts = [];
   try {
-    const profileUser = await User.findById(profileUserId);
+    const profileUser = await userService.findById(profileUserId);
     postIds = profileUser.post;
     if (!profileUser) throw new ValidationError("Could not find user")
-    for (let postId of postIds) {
-      const post = await Post.findById(postId);
-      let formattedPost = formatPost(post);
-      userPosts.push(formattedPost);
-    }
+    await postService.collectFormattedPosts(postIds, userPosts);
   } catch (error) {
     console.log(error);
   }
@@ -62,18 +42,15 @@ async function deletePost(req, res) {
   const loggedInUserId = req.headers.userid;
   const postId = req.headers.postid;
 
-  const user = await User.findById(loggedInUserId);
-  const post = await Post.findById(postId);
+  const user = await userService.findById(loggedInUserId);
+  const post = await postService.findById(postId);
 
   if (post) {
-    const deletedPost = await Post.deleteOne({ _id: postId });
+    const deletedPost = await postService.deleteById(postId);
     console.log(`Deleted post:  ${deletedPost.deletedCount}`);
   }
-  let remainingPostIds = [];
   if (user) {
-    remainingPostIds = user.post;
-    remainingPostIds.splice(remainingPostIds.indexOf(postId), 1);
-    await User.updateOne({ _id: loggedInUserId }, { $set: { post: remainingPostIds } });
+    await userService.removePostFromUser(user, postId);
   } else console.log("No user found");
 
   res.json({ message: "Deleted" });
@@ -83,17 +60,11 @@ async function getPostsOfFollowing(req, res) {
   const loggedInUserId = req.headers.userid;
   let feedPosts = [];
   try {
-    const user = await User.findById(loggedInUserId);
+    const user = await userService.findById(loggedInUserId);
     if (user) {
-      const followedUserIds = user.following;
-      for (let followedUserId of followedUserIds) {
-        const followedUser = await User.findById(followedUserId);
-        const followedUserPostIds = followedUser.post;
-        for (let postId of followedUserPostIds) {
-          const post = await Post.findById(postId);
-          let formattedPost = formatPost(post);
-          feedPosts.push(formattedPost);
-        }
+      for (const followedUserId of user.following) {
+        const followedUser = await userService.findById(followedUserId);
+        await postService.collectFormattedPosts(followedUser.post, feedPosts);
       }
     } else console.log("Notfound");
   } catch (error) {

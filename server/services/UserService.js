@@ -33,6 +33,35 @@ class UserService {
         const loggedInUser = await this.findById(loggedInUserId);
         return loggedInUser.following.includes(profileUserId);
     }
+
+    findByEmail(email){
+        return User.findOne({ email: email });
+    }
+
+    async register(username, email, hashedPassword){
+        const newUser = await User.create({
+            username: username,
+            email: email,
+            password: hashedPassword,
+        });
+        // Not awaited, exactly as in the original signup code
+        newUser.save();
+    }
+
+    // Case-insensitive search on part of the username
+    searchByUsername(searchTerm){
+        return User.find({ username: { $regex: searchTerm, $options: "i" } });
+    }
+
+    addPostToUser(userId, postId){
+        return User.findOneAndUpdate({ _id: userId }, { $push: { post: postId } });
+    }
+
+    async removePostFromUser(user, postId){
+        const remainingPostIds = user.post;
+        remainingPostIds.splice(remainingPostIds.indexOf(postId), 1);
+        await User.updateOne({ _id: user._id }, { $set: { post: remainingPostIds } });
+    }
 }
 
 module.exports = new UserService()

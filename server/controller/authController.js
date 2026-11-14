@@ -1,7 +1,7 @@
 require("dotenv").config();
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const User = require("../models/User");
+const userService = require("../services/UserService");
 const { ValidationError } = require("../errors/ApiError");
 
 async function signup(req, res) {
@@ -12,16 +12,11 @@ async function signup(req, res) {
 
   const hashedPassword = await bcrypt.hash(password, +process.env.SALT_ROUNDS);
 
-  const user = await User.findOne({ email: email });
+  const user = await userService.findByEmail(email);
   if (user)
     throw new ValidationError("User already registered");
   else {
-    const newUser = await User.create({
-      username: username,
-      email: email,
-      password: hashedPassword,
-    });
-    newUser.save();
+    await userService.register(username, email, hashedPassword);
     res.json({ message: "added" });
   }
 }
@@ -32,7 +27,7 @@ async function signIn(req, res) {
   if (!email || !password)
     throw new ValidationError("Missing details");
 
-  const user = await User.findOne({ email: email });
+  const user = await userService.findByEmail(email);
 
   if (user) {
     const matchedPasswords = await bcrypt.compare(password, user.password);
