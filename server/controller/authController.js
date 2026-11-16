@@ -31,9 +31,9 @@ async function signIn(req, res) {
 
   if (user) {
     const matchedPasswords = await bcrypt.compare(password, user.password);
-
+    const key = new TextEncoder().encode(process.env.JWT_KEY)
     if (matchedPasswords) {
-      const token = await new jose.SignJWT({ _id: user._id.toString() }).setProtectedHeader({alg: "HS256"}).setExpirationTime("30d").sign(process.env.JWT_KEY)
+      const token = await new jose.SignJWT({ _id: user._id.toString() }).setProtectedHeader({alg: "HS256"}).setExpirationTime("30d").sign(key)
 
       user.token = token;
       res.json({ id: user._id, username: user.username, token: token });

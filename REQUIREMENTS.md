@@ -21,7 +21,7 @@
    - Messages saved in MongoDB, with history loading.
    - Real-time delivery.
    - Conversation list with unread counts.
-7. **Images in posts** — upload with type and size checks, store in Cloudinary or S3, preview before posting.
+7. **Images in posts** — upload with type and size checks, store in Azure Blob Storage, preview before posting.
 8. **Events**
    - **Create:** title, description, category, location, date and time, optional max attendees and photo.
    - **Discover:** events in the feed, plus a "nearby" search using MongoDB geo queries, filtered by date, distance and category.
@@ -41,7 +41,18 @@
 13. **AI "Improve my post"** *(optional)* — server-side LLM call with per-user rate limiting and a spending cap.
 
 ## Phase 4 — Ship it
-14. **Deploy with a live demo link** — server on Render or Railway, client on Vercel, database on MongoDB Atlas. Add screenshots and the pitch to the README.
+14. **Containerize**
+    - `Dockerfile` for the server and for the client (multi-stage build, client served by nginx).
+    - `docker-compose.yml` for local development (server, client, MongoDB, Redis).
+15. **Deploy to Azure Kubernetes Service (AKS)**
+    - Images pushed to Azure Container Registry (ACR).
+    - Kubernetes manifests (or a Helm chart): Deployments, Services, Ingress with HTTPS (cert-manager + Let's Encrypt).
+    - Secrets (`JWT_KEY`, database URL, API keys) in Kubernetes Secrets or Azure Key Vault, never in images.
+    - Health checks (readiness and liveness probes) on the server.
+    - **Socket.io across several server pods:** sticky sessions on the Ingress plus the Socket.io Redis adapter, so chat and notifications reach users connected to any pod.
+    - Database: managed MongoDB (MongoDB Atlas or Azure Cosmos DB for MongoDB) rather than running it in the cluster.
+16. **CI/CD** — GitHub Actions: run tests, build and push images to ACR, deploy to AKS on merge to `main`.
+17. **Live demo link** — add screenshots, the pitch and an architecture diagram to the README.
 
 ## Defaults (can change)
 - Events are **public**; anyone can join.

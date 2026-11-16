@@ -1,8 +1,8 @@
 const express = require("express");
 const router = express.Router();
 const isUserAuthenticated = require("../middleware/isUserAuthenticated");
-
-router.get("/dashboard", isUserAuthenticated, (req, res) => {
+const asyncHandler = require("../middleware/asyncHandler")
+router.get("/dashboard", asyncHandler(isUserAuthenticated), (req, res) => {
   res.redirect("/");
 });
 

@@ -6,7 +6,9 @@ const { ApiError } = require("../errors/ApiError");
 // Any other error goes on to Express's default handler (status 500),
 // which is what happened before this middleware existed.
 function errorHandler(err, req, res, next) {
+  console.log("CALLED");
   if (err instanceof ApiError) {
+    console.log(err)
     return res.status(err.status).json({ message: err.message });
   }
   next(err);
